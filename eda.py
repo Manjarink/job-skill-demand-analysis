@@ -207,8 +207,9 @@ plt.title("Technical vs Non-Technical Skills Distribution", fontsize=16, fontwei
 plt.tight_layout()
 plt.show()
 
-print("\nInterpretation:")
-print("Technical skills dominate the dataset, showing that technical expertise is the primary requirement in tech jobs.")
+print("\n💡 Strategic Insights:")
+print("- Hard-Skill Dominance: Technical competencies dominate the dataset at a ratio of nearly 4:1.")
+print("- Why It Matters: Hard technical expertise acts as the mandatory primary filter for recruiters. Resumes lacking strict technical keywords often fail algorithmic screenings.")
 
 # ============================================================
 #  ADVANCED: OUTLIER ANALYSIS
@@ -309,9 +310,10 @@ plt.ylabel("Frequency")
 plt.tight_layout()
 plt.show()
 
-print("Interpretation:")
-print("- Skill Count: Shows a right skew, meaning most jobs ask for a standard set of skills (e.g., 3-8), with a long tail of 'unicorn' jobs asking for 15+.")
-print("- Job Demand: Shows an extreme right (positive) skew. This indicates a 'winner-takes-all' market where a few core skills appear in almost every job.")
+print("\n💡 Strategic Insights:")
+print("- Reasonable Hiring Expectations: The vast majority of employers ask for a standard, focused set of 3 to 8 skills.")
+print("- The 'Unicorn' Fallacy: Jobs asking for 15+ distinct technologies exist as outliers, making them statistically unrealistic to fill.")
+print("- Heavy-Tailed Disparity: The extreme right skew mathematically proves that a small elite subset of skills monopolizes the market layout.")
 
 
 
@@ -327,10 +329,10 @@ print("K-Means Cluster Centers (Original Scale):")
 for i, center in enumerate(centroids_original):
     print(f"Cluster {i}: Average Skill Count = {center[0]:.1f}, Average Job Demand = {center[1]:.1f}")
 
-print("\nMeaningful Interpretation:")
-print("- Cluster 0: Moderate skills, moderate demand (typical roles).")
-print("- Cluster 1: High skills, low demand (overloaded job descriptions).")
-print("- Cluster 2: Moderate skills, very high demand (core market skills).")
+print("\n💡 Strategic Insights (K-Means Strata):")
+print("- Cluster 0 (The Standard Market): Moderate skills and moderate demand represent the most realistic, typical tech roles.")
+print("- Cluster 1 (Overloaded Descriptions): Massive skill requirements mapped to the lowest demand. These are mathematically 'kitchen-sink' outliers.")
+print("- Cluster 2 (The Core Pillars): Moderate skills tied to massive market demand. This is the sweet spot for a highly employable candidate profile.")
 
 # ============================================================
 # ADVANCED: LOW DEMAND SKILLS ANALYSIS
@@ -340,9 +342,9 @@ bottom_10_skills = jobs_per_skill.sort_values(by='job_count').head(10)
 print("Bottom 10 Skills by Market Coverage:")
 print(bottom_10_skills.to_string(index=False))
 
-print("\nInterpretation:")
-print("- Market Inequality: The tech market exhibits a massive 'long tail'.")
-print("- Thousands of hyper-specific libraries or legacy tools have near-zero widespread demand.")
+print("\n💡 Strategic Insights:")
+print("- The Long Tail: Thousands of hyper-specific libraries, proprietary systems, or legacy tools have near-zero widespread demand.")
+print("- Risk Factor: Learning a niche tool carries a high mathematical risk if it is not paired with a top-tier core skill to ensure employability.")
 
 # ============================================================
 # ADVANCED: DATASET SUMMARY STATS
@@ -373,8 +375,8 @@ print("- job_count: Engineered feature representing the total market demand for 
 # FINAL CONCLUSION
 # ============================================================
 # FIXED: Formatted Final Conclusion block with strong insights
-print("\n========== FINAL CONCLUSION ==========")
+print("\n========== FINAL EXECUTIVE CONCLUSION ==========")
 print("🎯 FINAL PROJECT INSIGHTS:")
-print("1. Skill Quality vs Quantity: Merely accumulating more skills does not make a candidate more employable. The data shows no meaningful reward for having 15+ skills compared to 5 core ones.")
-print("2. Core Skill Dominance: The market is fundamentally unequal. A tiny fraction of 'Anchor' skills commands the vast majority of job postings.")
-print("3. Market Behavior: High-demand roles look for a focused stack. Generalist roles asking for everything fall into low-demand clusters, suggesting poor tracking or niche scopes.")
+print("1. Skill Quality vs. Quantity: Accumulating a massive list of framework names does not make a candidate more employable. The data mathematically proves no meaningful reward for listing 15+ disjointed skills compared to mastering 5 interrelated core ones.")
+print("2. Core Skill Dominance: The market is structurally unequal. A tiny fraction of 'Anchor' skills (Python, SQL, AWS) commands the vast majority of all job postings. Time is best invested here.")
+print("3. Market Behavior (Specialization Wins): High-demand, realistic roles look for a focused stack. Generalist job postings that ask for 'everything' fall into low-demand clusters, strongly suggesting employers prioritize core specialization.")
