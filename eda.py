@@ -11,7 +11,7 @@ sns.set_theme(style="whitegrid", palette="muted")
 # ================= LOAD & PREPARE DATA =================
 df = pd.read_csv("cleaned_data.csv")
 
-# Filter for Tech Jobs
+# Filter for Tech Jobs to focus analysis strictly on technical roles
 df = df[df['job_title'].str.contains(
     'data|engineer|developer|software|analyst|machine learning|ai',
     case=False, na=False
@@ -21,7 +21,7 @@ df = df[df['job_title'].str.contains(
 df['skill'] = df['skill'].str.lower().str.strip()
 df.drop_duplicates(inplace=True)
 
-# Remove Non-Tech and Noise
+# Remove Non-Tech and Noise to isolate purely technical skillset requirements
 non_tech = ['communication', 'teamwork', 'leadership', 'time management', 'problem solving', 'problemsolving', 'customer service', 'attention to detail', 'communication skills', 'project management', 'interpersonal skills', 'organizational skills', 'sales', 'training', 'collaboration', 'analytical skills']
 pattern_noise = ['degree', 'bachelor', 'master', 'phd', 'experience', 'year', 'engineering', 'engineer', 'science', 'management', 'scheduling', 'office', 'autocad']
 strict_noise = ['troubleshooting', 'analytical', 'skill', 'skills']
@@ -38,7 +38,7 @@ jobs_per_skill.columns = ['skill', 'job_count']
 merged_df = pd.merge(tech_df, skills_per_job, on='job_id')
 merged_df = pd.merge(merged_df, jobs_per_skill, on='skill')
 
-# Create a clean subset for specific visualizations
+# Create a clean subset for specific visualizations by capping extreme outliers
 merged_df_clean = merged_df[merged_df['skill_count'] < 60].copy()
 
 # ============================================================
@@ -56,15 +56,16 @@ top_skills = tech_df['skill'].value_counts().head(10)
 
 plt.figure(figsize=(10, 5))
 sns.barplot(x=top_skills.values, y=top_skills.index, palette="viridis", hue=top_skills.index, legend=False)
-plt.title("Top 10 Technical Skills in Demand")
+plt.title("Top 10 Technical Skills by Frequency")
 plt.xlabel("Frequency")
 plt.ylabel("Skills")
 plt.tight_layout()
 plt.show()
 
 print("\nINSIGHTS:")
-print("→ Python, SQL, and Data Analysis dominate the job market completely.")
-print("→ Most roles strongly require these core foundations over niche tools.")
+print(f"→ Python is the most frequently requested skill, appearing {top_skills.iloc[0]} times.")
+print(f"→ SQL follows closely with {top_skills.iloc[1]} appearances.")
+print("→ The data indicates that advanced tech postings frequently reference these specific foundational technologies.")
 
 # ============================================================
 # ========== TECHNICAL VS NON-TECHNICAL SKILLS ==========
@@ -76,12 +77,12 @@ labels = ['Technical', 'Non-Technical']
 
 plt.figure(figsize=(6, 6))
 plt.pie(sizes, explode=(0.1, 0), labels=labels, autopct='%1.1f%%', shadow=True, startangle=140, colors=sns.color_palette("pastel")[0:2])
-plt.title("Technical vs Non-Technical Skill Focus")
+plt.title("Technical vs Non-Technical Skill Frequency")
 plt.show()
 
 print("\nINSIGHTS:")
-print("→ Employers emphasize technical (hard) skills by an almost 4:1 margin.")
-print("→ While soft skills matter, specific tech keywords are strictly required for job matching.")
+print(f"→ Mentions of technical skills ({sizes[0]}) are substantially higher than non-technical skills ({sizes[1]}).")
+print("→ This chart highlights frequency in job descriptions, suggesting an emphasis on technical keywords rather than determining inherent value.")
 
 # ============================================================
 # ========== SKILL COUNT VS JOB DEMAND ==========
@@ -95,7 +96,7 @@ plt.figure(figsize=(10, 5))
 sns.regplot(data=merged_df_clean, x='skill_count', y='job_count', scatter_kws={'alpha': 0.3}, line_kws={'color': 'darkred'})
 plt.title("Skill Count vs Job Demand")
 plt.xlabel("Number of Skills Requested per Job")
-plt.ylabel("Overall Market Demand")
+plt.ylabel("Job Demand")
 plt.tight_layout()
 plt.show()
 
@@ -103,8 +104,8 @@ corr = merged_df_clean[['skill_count', 'job_count']].corr().iloc[0,1]
 print(f"Calculated Correlation: {corr:.4f}")
 
 print("\nINSIGHTS:")
-print("→ There is practically no correlation between asking for more skills and those skills being highly demanded.")
-print("→ Jobs asking for an excessive number of skills are 'unicorn hunting' rather than standard industry practice.")
+print(f"→ There is a very weak negative correlation (~ {corr:.4f}), indicating no strong linear relationship.")
+print("→ The slight inverse trend suggests jobs listing higher volumes of skills do not correspond with proportionally higher Job Demand.")
 
 # ============================================================
 # ========== OUTLIER ANALYSIS ==========
@@ -126,13 +127,13 @@ plt.title("Outliers: Total Skills per Job")
 
 plt.subplot(1, 2, 2)
 sns.boxplot(x=jobs_per_skill['job_count'], color='orange')
-plt.title("Outliers: General Market Demand")
+plt.title("Outliers: Job Demand")
 plt.tight_layout()
 plt.show()
 
 print("\nINSIGHTS:")
-print("→ The long tail of 'Job Demand' shows that a tiny fraction of skills heavily dominates the market.")
-print("→ Stripping away outliers reduces correlation near zero, proving extreme postings skew the overall trend.")
+print("→ The boxplot for Job Demand indicates that the majority of skills have very low frequencies, while a few outliers appear disproportionately often.")
+print("→ When filtering extreme values, the correlation metrics remain near zero, suggesting extreme structural anomalies impact the regression line.")
 
 # ============================================================
 # ========== DISTRIBUTION ANALYSIS ==========
@@ -145,22 +146,25 @@ plt.title("Distribution of Skills Requested")
 
 plt.subplot(1, 2, 2)
 sns.histplot(jobs_per_skill['job_count'], kde=True, bins=30, color='darkorange')
-plt.title("Distribution of Market Demand")
+plt.title("Distribution of Job Demand")
 plt.tight_layout()
 plt.show()
 
 print("\nINSIGHTS:")
-print("→ Most standard tech jobs focus on requesting a reasonable stack of 3 to 8 main skills.")
-print("→ The extreme right skew in demand confirms a 'winner-takes-all' market built around key technologies.")
+print("→ The distribution for skills requested shows a right skew, with the dataset mode sitting between 3 to 8 skills per job.")
+print("→ The distribution for Job Demand exhibits an extreme right skew, indicating a concentration of demand isolated to a few key technologies.")
 
 # ============================================================
 # ========== CLUSTERING ANALYSIS ==========
 # ============================================================
 print("\n========== CLUSTERING ANALYSIS ==========")
 cluster_data = merged_df_clean[['skill_count', 'job_count']].drop_duplicates().dropna()
+
+# Standardize variables to ensure K-Means computes distances uniformly across both axes
 scaler = StandardScaler()
 scaled_data = scaler.fit_transform(cluster_data)
 
+# K-Means applied to segment distinct structural groupings within the job-skill pairs
 kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
 cluster_data['cluster'] = kmeans.fit_predict(scaled_data)
 
@@ -168,19 +172,19 @@ plt.figure(figsize=(10, 5))
 sns.scatterplot(data=cluster_data, x='skill_count', y='job_count', hue='cluster', palette='Set1', alpha=0.7)
 plt.title("K-Means Market Segmentation")
 plt.xlabel("Skills Requested per Job")
-plt.ylabel("Overall Market Demand")
+plt.ylabel("Job Demand")
 plt.tight_layout()
 plt.show()
 
 print("\nINSIGHTS:")
-print("→ Cluster 0 (Typical Roles): Moderate skills and moderate demand. Represents realistic daily job postings.")
-print("→ Cluster 1 (Unicorn Roles): High skills but low demand. Overloaded, messy job descriptions seeking generalized 'do-it-all' developers.")
-print("→ Cluster 2 (Core Anchors): Moderate skills paired with highest market demand. Represents the foundational tools driving the industry.")
+print("→ Cluster 0 maps moderate ranges in both requested skill count and corresponding Job Demand.")
+print("→ Cluster 1 shows postings with a substantially higher average skill count, but with distinctly lower Job Demand trends.")
+print("→ Cluster 2 consists of moderate skill volumes paired with visibly the highest scale of Job Demand.")
 
 # ============================================================
 # ========== FINAL TAKEAWAYS ==========
 # ============================================================
 print("\n========== FINAL TAKEAWAYS ==========")
-print("→ Value of Core Skills: Market demand is heavily unequal; mastering 3 core skills (Python, SQL, AWS) guarantees broader opportunities than knowing 15 niche tools.")
-print("→ The Generalist Trap: Roles requiring an excessive volume of skills (20+) consistently correlate with the lowest structural market demand.")
-print("→ Clear Industry Standards: True tech roles clearly prioritize specific hard skills over soft skills, meaning resumes must be keyword-optimized for Applicant Tracking Systems.")
+print("→ Analysis of top frequencies suggests that foundational frameworks generate the highest Job Demand across all grouped roles.")
+print("→ Quantitative metrics and clustering indicate that simply increasing the technical requirement volume (skill count) inversely or weakly affects overall Job Demand.")
+print("→ Frequency data highlights a structural skew, emphasizing concentrated technical skill groupings rather than generalized keyword stacking.")
