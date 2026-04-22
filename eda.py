@@ -65,7 +65,7 @@ plt.show()
 print("\nINSIGHTS:")
 print(f"→ Python is the most frequently requested skill, appearing {top_skills.iloc[0]} times.")
 print(f"→ SQL follows closely with {top_skills.iloc[1]} appearances.")
-print("→ The data indicates that advanced tech postings frequently reference these specific foundational technologies.")
+print("→ These technologies appear most frequently across job postings in the dataset.")
 
 # ============================================================
 # ========== TECHNICAL VS NON-TECHNICAL SKILLS ==========
@@ -133,7 +133,7 @@ plt.show()
 
 print("\nINSIGHTS:")
 print("→ The boxplot for Job Demand indicates that the majority of skills have very low frequencies, while a few outliers appear disproportionately often.")
-print("→ When filtering extreme values, the correlation metrics remain near zero, suggesting extreme structural anomalies impact the regression line.")
+print("→ When filtering extreme values, the correlation metrics remain near zero, suggesting extreme outliers influence the regression trend despite overall weak correlation.")
 
 # ============================================================
 # ========== DISTRIBUTION ANALYSIS ==========
@@ -179,12 +179,12 @@ plt.show()
 print("\nINSIGHTS:")
 print("→ Cluster 0 maps moderate ranges in both requested skill count and corresponding Job Demand.")
 print("→ Cluster 1 shows postings with a substantially higher average skill count, but with distinctly lower Job Demand trends.")
-print("→ Cluster 2 consists of moderate skill volumes paired with visibly the highest scale of Job Demand.")
+print("→ Cluster 2 shows relatively higher Job Demand compared to other clusters.")
 
 # ============================================================
 # ========== FINAL TAKEAWAYS ==========
 # ============================================================
 print("\n========== FINAL TAKEAWAYS ==========")
-print("→ Analysis of top frequencies suggests that foundational frameworks generate the highest Job Demand across all grouped roles.")
+print("→ Frequently occurring skills also correspond to higher observed Job Demand values.")
 print("→ Quantitative metrics and clustering indicate that simply increasing the technical requirement volume (skill count) inversely or weakly affects overall Job Demand.")
-print("→ Frequency data highlights a structural skew, emphasizing concentrated technical skill groupings rather than generalized keyword stacking.")
+print("→ Frequency data highlights a structural skew, indicating demand is concentrated around a smaller set of frequently occurring skills.")
