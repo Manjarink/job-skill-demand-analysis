@@ -108,6 +108,22 @@ print(f"→ There is a very weak negative correlation (~ {corr:.4f}), indicating
 print("→ The slight inverse trend suggests jobs listing higher volumes of skills do not correspond with proportionally higher Job Demand.")
 
 # ============================================================
+# ========== CORRELATION HEATMAP ==========
+# ============================================================
+print("\n========== CORRELATION HEATMAP ==========")
+corr_matrix = merged_df_clean[['skill_count', 'job_count']].corr()
+
+plt.figure(figsize=(6, 5))
+sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".3f", square=True, cbar_kws={"shrink": .8})
+plt.title("Correlation Heatmap: Skill Count vs Job Demand")
+plt.tight_layout()
+plt.show()
+
+print("\nINSIGHTS:")
+print("→ The heatmap visually confirms the weak inverse correlation between the evaluated metrics.")
+print("→ This supports the conclusion that adding more skills does not correlate with an increase in observed market demand.")
+
+# ============================================================
 # ========== OUTLIER ANALYSIS ==========
 # ============================================================
 print("\n========== OUTLIER ANALYSIS ==========")
